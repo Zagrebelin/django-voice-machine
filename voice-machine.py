@@ -26,6 +26,20 @@ class ScheduleItemAdmin(sqla.ModelView):
                       'use_friday',
                       'use_saturday',
                       'use_sunday',)
+    column_labels = {'use_holiday': 'Выходные',
+                     'use_workday': 'Будни',
+                     'use_monday': 'Понедельник',
+                     'use_tuesday': 'Вторник',
+                     'use_wednesday': 'Среда',
+                     'use_thursday': 'Четверг',
+                     'use_friday': 'Пятница',
+                     'use_saturday': 'Суббота',
+                     'use_sunday': 'Воскресение',
+                     'holiday_or_weekday': 'Рабочие дни или выходные',
+                     'weekdays': 'Дни недели'
+                     }
+    column_list = ('time', 'message', 'order', 'holiday_or_weekday', 'weekdays')
+    column_default_sort = 'time'
 
 
 @app.route('/')
