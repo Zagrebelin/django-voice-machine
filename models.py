@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-import sqlalchemy
-sqlalchemy.Column
+
 db = SQLAlchemy()
 
 
@@ -15,8 +14,12 @@ class ScheduleItem(db.Model):
     use_saturday = db.Column(db.Boolean)
     use_sunday = db.Column(db.Boolean)
 
-    hour = db.Column(db.Integer)
-    minute = db.Column(db.Integer)
+    time = db.Column(db.Time)
     message = db.Column(db.String)
     order = db.Column(db.Integer, default=0)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+
+class Holiday(db.Model):
+    date = db.Column(db.Date)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
