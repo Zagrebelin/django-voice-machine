@@ -36,9 +36,19 @@ def hello_world():
 @app.route('/now')
 def get_strings_now():
     today = datetime.datetime.now()
-    weekday = today.strftime('%A').lower()
-    time = datetime.time(hour=today.hour, minute=today.minute)
-    date = today.date()
+    return get_strings_date(today)
+
+
+@app.route('/next_minute')
+def get_strings_next_minute():
+    next_minute = datetime.datetime.now()+datetime.timedelta(minutes=1)
+    return get_strings_date(next_minute)
+
+
+def get_strings_date(dt):
+    weekday = dt.strftime('%A').lower()
+    time = datetime.time(hour=dt.hour, minute=dt.minute)
+    date = dt.date()
     holiday = models.Holiday.query.filter_by(date=date).count()
     parts = models.ScheduleItem.query
     parts = parts.filter_by(time=time)
