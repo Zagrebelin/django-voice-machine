@@ -63,14 +63,14 @@ def get_strings_date(dt):
     weekday = dt.strftime('%A').lower()
     time = datetime.time(hour=dt.hour, minute=dt.minute)
     date = dt.date()
-    holiday = models.Holiday.query.filter_by(date=date).count()
-    parts = models.ScheduleItem.query
+    holiday = models.session.query(models.Holiday).filter_by(date=date).count()
+    parts = models.session.query(models.ScheduleItem)
     parts = parts.filter_by(time=time)
     parts = parts.filter_by(**{'use_%s' % weekday: 1})
     if holiday:
         parts = parts.filter_by(use_holiday=1)
     else:
-        parts = parts.filter_by(use_weekday=1)
+        parts = parts.filter_by(use_workday=1)
     parts = parts.order_by(models.ScheduleItem.order)
     parts = parts.values('message')
     txt = ' '.join(p[0] for p in parts)
@@ -78,12 +78,12 @@ def get_strings_date(dt):
 
 
 if __name__ == '__main__':
-    models.db.init_app(app)
-    with app.app_context():
-        models.db.create_all()
+    #models.db.init_app(app)
+    #with app.app_context():
+    #    models.db.create_all()
 
     admin = admin.Admin(app, name='Voice Machine', template_mode='bootstrap3')
-    admin.add_view(ScheduleItemAdmin(models.ScheduleItem, models.db.session))
-    admin.add_view(sqla.ModelView(models.Holiday, models.db.session))
+    admin.add_view(ScheduleItemAdmin(models.ScheduleItem, models.session))
+    admin.add_view(sqla.ModelView(models.Holiday, models.session))
 
     app.run()

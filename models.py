@@ -1,23 +1,26 @@
-from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-db = SQLAlchemy()
 
+BaseModel = declarative_base()
 
-class ScheduleItem(db.Model):
-    use_holiday = db.Column(db.Boolean)
-    use_workday = db.Column(db.Boolean)
-    use_monday = db.Column(db.Boolean)
-    use_tuesday = db.Column(db.Boolean)
-    use_wednesday = db.Column(db.Boolean)
-    use_thursday = db.Column(db.Boolean)
-    use_friday = db.Column(db.Boolean)
-    use_saturday = db.Column(db.Boolean)
-    use_sunday = db.Column(db.Boolean)
+class ScheduleItem(BaseModel):
+    __tablename__ = 'schedule_item'
+    use_holiday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_workday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_monday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_tuesday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_wednesday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_thursday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_friday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_saturday = sqlalchemy.Column(sqlalchemy.Boolean)
+    use_sunday = sqlalchemy.Column(sqlalchemy.Boolean)
 
-    time = db.Column(db.Time)
-    message = db.Column(db.String)
-    order = db.Column(db.Integer, default=0)
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    time = sqlalchemy.Column(sqlalchemy.Time)
+    message = sqlalchemy.Column(sqlalchemy.String)
+    order = sqlalchemy.Column(sqlalchemy.Integer, default=0)
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
     @property
     def holiday_or_weekday(self):
@@ -49,6 +52,12 @@ class ScheduleItem(db.Model):
         return ', '.join(ret)
 
 
-class Holiday(db.Model):
-    date = db.Column(db.Date)
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+class Holiday(BaseModel):
+    __tablename__ = 'holiday'
+    date = sqlalchemy.Column(sqlalchemy.Date)
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+
+
+engine = sqlalchemy.create_engine('sqlite:///./sample_db_2.sqlite', echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
