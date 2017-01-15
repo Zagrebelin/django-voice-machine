@@ -54,6 +54,7 @@ class ScheduleItem(BaseModel):
 
 class Holiday(BaseModel):
     __tablename__ = 'holiday'
+    year = sqlalchemy.Column(sqlalchemy.Integer)
     date = sqlalchemy.Column(sqlalchemy.Date)
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
 
@@ -61,3 +62,4 @@ class Holiday(BaseModel):
 engine = sqlalchemy.create_engine('sqlite:///./sample_db_2.sqlite', echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
+BaseModel.metadata.create_all(engine)
