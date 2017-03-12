@@ -42,7 +42,9 @@ def time_as_string(dt: datetime.datetime) -> str:
     if not ret:
         hour_s = decline(dt.hour, 'часов', 'час', 'часа')
         min_s = decline(dt.minute, 'минут', 'минута', 'минуты')
-        ret = f'{dt.hour} {hour_s} {dt.minute} {min_s}'
+        minute = int_to_str(dt.minute, 'female')
+        hour = int_to_str(dt.hour, 'male')
+        ret = f'{hour} {hour_s} {minute} {min_s}'
     ret = re.sub('\d+', repl=lambda m: int_to_str(int(m.group(0))), string=ret)
     return ret
 
@@ -56,9 +58,20 @@ def weekday_as_string(dt: datetime.datetime) -> str:
     return 'понедельник вторник среда четверг пятница суббота воскресенье'.split()[dt.weekday()]
 
 
-def int_to_str(i: int) -> str:
+def int_to_str(i: int, gender:str) -> str:
+    """
+
+    :param i:
+    :param gender: MALE FEMALE or MIDDLE
+    :return:
+    """
     decs = ['', 'десять', 'двадцать', 'тридцать', 'сорок', 'пятьдесят']
-    ones = 'ноль один два три четыре пять шесть семь восемь девять'.split()
+    ones = {
+        'male':'ноль один два три четыре пять шесть семь восемь девять'.split(),
+        'female': 'ноль одна две три четыре пять шесть семь восемь девять'.split(),
+        'middle': 'ноль одно два три четыре пять шесть семь восемь девять'.split()
+    }
+    ones = ones[gender.lower()]
     tens = 'одиннадцать двенадцать тринадцать четырнадцать пятнадцать шестнадцать семнадцать восемнадцать девятнадцать'.split()
     dec, one = divmod(i, 10)
     if dec == 0:
