@@ -1,10 +1,7 @@
 import datetime
 import os
 import random
-import itertools
 import re
-
-from django.utils.dates import WEEKDAYS
 
 
 def date_as_string(dt: datetime.datetime) -> str:
@@ -49,16 +46,11 @@ def time_as_string(dt: datetime.datetime) -> str:
     return ret
 
 
-def xxx(*a, **kw):
-    print(a, kw)
-    return 'xxx'
-
-
 def weekday_as_string(dt: datetime.datetime) -> str:
     return 'понедельник вторник среда четверг пятница суббота воскресенье'.split()[dt.weekday()]
 
 
-def int_to_str(i: int, gender:str) -> str:
+def int_to_str(i: int, gender: str = 'male') -> str:
     """
 
     :param i:
@@ -67,7 +59,7 @@ def int_to_str(i: int, gender:str) -> str:
     """
     decs = ['', 'десять', 'двадцать', 'тридцать', 'сорок', 'пятьдесят']
     ones = {
-        'male':'ноль один два три четыре пять шесть семь восемь девять'.split(),
+        'male': 'ноль один два три четыре пять шесть семь восемь девять'.split(),
         'female': 'ноль одна две три четыре пять шесть семь восемь девять'.split(),
         'middle': 'ноль одно два три четыре пять шесть семь восемь девять'.split()
     }
@@ -84,7 +76,7 @@ def int_to_str(i: int, gender:str) -> str:
 
 
 def decline(num, zero, one, two):
-    if (num % 100) // 10 == 1 or num % 10 in (0,5,6,7,8,9):
+    if (num % 100) // 10 == 1 or num % 10 in (0, 5, 6, 7, 8, 9):
         return zero
     if num % 10 == 1:
         return one

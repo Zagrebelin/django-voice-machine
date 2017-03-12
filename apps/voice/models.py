@@ -5,6 +5,7 @@ from django.template import Context, Template
 
 import humanize
 
+
 class Holiday(models.Model):
     date = models.DateField()
     year = models.IntegerField()
@@ -70,13 +71,20 @@ class ScheduleItem(models.Model):
     @property
     def display_date(self):
         wd = []
-        if self.use_monday: wd.append('пн')
-        if self.use_tuesday: wd.append('вт')
-        if self.use_wednesday: wd.append('ср')
-        if self.use_thursday: wd.append('чт')
-        if self.use_friday: wd.append('пт')
-        if self.use_saturday: wd.append('сб')
-        if self.use_sunday: wd.append('вс')
+        if self.use_monday:
+            wd.append('пн')
+        if self.use_tuesday:
+            wd.append('вт')
+        if self.use_wednesday:
+            wd.append('ср')
+        if self.use_thursday:
+            wd.append('чт')
+        if self.use_friday:
+            wd.append('пт')
+        if self.use_saturday:
+            wd.append('сб')
+        if self.use_sunday:
+            wd.append('вс')
 
         if not wd:
             return 'Никогда'
@@ -98,5 +106,3 @@ class ScheduleItem(models.Model):
             return 'Каждый день'
 
         return f'{a1}, {a2}'
-
-

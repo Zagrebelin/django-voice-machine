@@ -18,6 +18,7 @@ class TimeTestCase(TestCase):
             actual = time_as_string(dt)
             self.assertIsInstance(actual, str)
             self.assertGreater(len(actual), 0)
+
         return test
 
     @classmethod
@@ -29,9 +30,11 @@ class TimeTestCase(TestCase):
 
 class DateTestCase(TestCase):
     def test_1_jan(self):
-        self.assertEqual(date_as_string(datetime.datetime(2017,1,1)), 'первое января')
+        self.assertEqual(date_as_string(datetime.datetime(2017, 1, 1)), 'первое января')
+
     def test_11_mar(self):
-        self.assertEqual(date_as_string(datetime.datetime(2017,3,11)), 'одиннадцатое марта')
+        self.assertEqual(date_as_string(datetime.datetime(2017, 3, 11)), 'одиннадцатое марта')
+
 
 class IntToStrTestCase(TestCase):
     def test_0(self):
@@ -111,23 +114,28 @@ class DeclineTestCase(TestCase):
 
 class WeekdayTestCase(TestCase):
     def test_пн(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,6)), 'понедельник')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 6)), 'понедельник')
+
     def test_вт(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,7)), 'вторник')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 7)), 'вторник')
+
     def test_ср(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,8)), 'среда')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 8)), 'среда')
+
     def test_чт(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,9)), 'четверг')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 9)), 'четверг')
+
     def test_пт(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,10)), 'пятница')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 10)), 'пятница')
+
     def test_сб(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,11)), 'суббота')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 11)), 'суббота')
+
     def test_вс(self):
-        self.assertEqual(weekday_as_string(datetime.datetime(2017,3,12)), 'воскресенье')
+        self.assertEqual(weekday_as_string(datetime.datetime(2017, 3, 12)), 'воскресенье')
 
 
 TimeTestCase.generate_tests()
-
 
 if __name__ == '__main__':
     main()
