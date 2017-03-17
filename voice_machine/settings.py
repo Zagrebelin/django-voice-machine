@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import subprocess
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -124,7 +126,10 @@ STATIC_URL = '/static/'
 # yandex speech
 YANDEX_SPEECH_API_KEY = 'a25004df-0aaf-4db3-9c34-31fa35a2ba51'
 YANDEX_SPEECH_CACHE_PATH = os.path.join(BASE_DIR, 'speech_cache')
+
 YANDEX_SPEECH_VOICES = {
     'primary': 'omazh',
     'secondary': 'ermil'
 }
+
+MP3_PLAYER = lambda filenames: subprocess.run(['mpg123', 'dindon.mp3']+filenames)

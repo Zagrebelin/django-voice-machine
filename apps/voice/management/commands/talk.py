@@ -18,4 +18,4 @@ class Command(BaseCommand):
                 voice = settings.YANDEX_SPEECH_VOICES.get(item.voice_type, primary_voice)
                 filenames.append(yandex_voice.generate_mp3(part, voice, item.voice_emotion))
         if filenames:
-            print(filenames)
+            settings.MP3_PLAYER(filenames)
