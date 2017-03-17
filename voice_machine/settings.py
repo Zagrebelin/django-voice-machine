@@ -124,3 +124,7 @@ STATIC_URL = '/static/'
 # yandex speech
 YANDEX_SPEECH_API_KEY = 'a25004df-0aaf-4db3-9c34-31fa35a2ba51'
 YANDEX_SPEECH_CACHE_PATH = os.path.join(BASE_DIR, 'speech_cache')
+YANDEX_SPEECH_VOICES = {
+    'primary': 'omazh',
+    'secondary': 'ermil'
+}
