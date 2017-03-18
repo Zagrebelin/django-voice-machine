@@ -12,5 +12,5 @@ class Command(BaseCommand):
         parser.add_argument('text_to_speech', nargs='*')
 
     def handle(self, voice, emotion, text_to_speech, *a, **kw):
-        item = ScheduleItem(voice_emotion=emotion, voice_type=type, message=text_to_speech)
+        item = ScheduleItem(voice_emotion=emotion, voice_type=voice, message=text_to_speech)
         talk([item])
