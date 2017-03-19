@@ -40,12 +40,12 @@ def play_audio(message):
 def say(message: Message):
     text = message.text.split(' ', 1)[1]
     if text.split()[0] in ['primary', 'secondary']:
-        voice_type, text = text.split(' ', 1)[0]
+        voice_type, text = text.split(' ', 1)
     else:
         voice_type = 'primary'
 
     if text.split()[0] in ['normal', 'neutral', 'good', 'evil']:
-        emotion, text = text.split(' ', 1)[0]
+        emotion, text = text.split(' ', 1)
         emotion = 'neutral' if emotion == 'normal' else emotion
     else:
         emotion = 'neutral'
