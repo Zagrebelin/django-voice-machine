@@ -1,0 +1,9 @@
+machine:
+   python:
+      version: 3.6.0
+
+deployment:
+   production:
+       branch: master
+       commands:
+           - ssh -6 pavel@eee.home.zagrebelin.ru "cd voice_machine && git pull origin master"
