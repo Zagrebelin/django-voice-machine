@@ -38,7 +38,10 @@ def play_audio(message):
 @bot.message_handler(commands=['say'])
 @access_filter
 def say(message: Message):
-    text = message.text.split(' ', 1)[1]
+    text = message.text.split(' ', 1)
+    if len(text) == 1:
+        return
+    text = text[1]
     if text.split()[0] in ['primary', 'secondary']:
         voice_type, text = text.split(' ', 1)
     else:
@@ -58,5 +61,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         bot.polling()
 
-#TODO: подсказки для команды say
-#TODO: access_filter
+        # TODO: подсказки для команды say
+        # TODO: access_filter
