@@ -6,4 +6,5 @@ deployment:
    production:
        branch: master
        commands:
-           - ssh -6 pavel@eee.home.zagrebelin.ru "cd voice_machine && git pull origin master"
+           - ip addr show
+           - ssh -6 -v pavel@eee.home.zagrebelin.ru "cd voice_machine && git pull origin master"
