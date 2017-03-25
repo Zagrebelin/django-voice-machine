@@ -1,9 +1,10 @@
 import os
+import logging
 
 from django.core.management import BaseCommand
 from django.conf import settings
 import telebot, telebot.types
-from telebot.types import Message
+from telebot.types import Message, User
 import requests
 
 from ...tools import talk
@@ -13,9 +14,12 @@ bot = telebot.TeleBot('337231177:AAEJprXTPG9h0GlYfqdwuE0gN7F-aJyTkv4')
 
 
 def access_filter(func):
-    def inner_function(*a, **kw):
-        return func(*a, **kw)
-
+    def inner_function(message: Message, *a, **kw):
+        from_user = message.from_user  # type:User
+        if from_user.id != 158695346:
+            bot.reply_to(message, 'https://www.youtube.com/watch?v=kSdgHtNuslY')
+        else:
+            return func(message, *a, **kw)
     return inner_function
 
 
