@@ -1,4 +1,3 @@
-from bitfield.admin import BitFieldListFilter
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
