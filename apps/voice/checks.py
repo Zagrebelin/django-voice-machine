@@ -33,12 +33,20 @@ def settings_YANDEX_SPEECH_CACHE_PATH(*a, **kw):
         return [Error(f'Unable write to cache path {path}')]
     return []
 
+
 @register
 def settings_MP3_PLAYER(*a, **kw):
-    if not hasattr(settings, 'MP3_PLAYER'):
-        return [Error('MP3_PLAYER settings must be defined.',
-                      hint='It is a callable with *filenames args')]
-    if not callable(settings.MP3_PLAYER):
-        return [Error('MP3_PLAYER settings must be callable.',
-                      hint='It is a callable with *filenames args')]
+    return check_settings_callable('MP3_PLAYER', hint='It is a callable with *filenames args')
+
+
+@register
+def settings_OGG_PLAYER(*a, **kw):
+    return check_settings_callable('OGG_PLAYER', hint='It is a callable with *filenames args')
+
+
+def check_settings_callable(name, hint=None):
+    if not hasattr(settings, name):
+        return [Error(f'{name} settings must be defined.', hint=hint)]
+    if not callable(settings.OGG_PLAYER):
+        return [Error(f'{name} settings must be callable.', hint=hint)]
     return []
