@@ -4,8 +4,14 @@ from django.conf import settings
 import yandex_voice
 from . import models
 
-def talk(items:typing.List[models.ScheduleItem]):
 
+def talk(items: typing.List[models.ScheduleItem]):
+    filenames = download(items)
+    if filenames:
+        settings.MP3_PLAYER(filenames)
+
+
+def download(items: typing.List[models.ScheduleItem]):
     primary_voice = settings.YANDEX_SPEECH_VOICES['primary']
 
     filenames = []
@@ -15,5 +21,4 @@ def talk(items:typing.List[models.ScheduleItem]):
         for part in parts:
             voice = settings.YANDEX_SPEECH_VOICES.get(item.voice_type, primary_voice)
             filenames.append(yandex_voice.generate_mp3(part, voice, item.voice_emotion))
-    if filenames:
-        settings.MP3_PLAYER(filenames)
+    return filenames
