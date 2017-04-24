@@ -6,7 +6,9 @@ from . import forms
 
 class ScheduleItemAdmin(ModelAdmin):
     list_display = ['message', 'display_date', 'time', 'order']
-
+    ordering = ['time', 'order']
+    list_filter = ['use_holiday', 'use_workday']
+    
     def get_form(self, request, obj=None, **kwargs):
         return forms.ScheduleItemForm
 
