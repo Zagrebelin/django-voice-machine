@@ -7,6 +7,7 @@ from . import models
 
 def talk(items: typing.List[models.ScheduleItem]):
     filenames = download(items)
+    print(filenames)
     if filenames:
         settings.MP3_PLAYER(filenames)
 
