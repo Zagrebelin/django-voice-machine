@@ -30,6 +30,7 @@ class ScheduleItemManager(models.Manager):
         weekday_field = 'use_' + self.weekdaynames[dt.weekday()]
         qs = qs.filter(**{weekday_field: True})
         qs = qs.filter(time=dt.time())
+        print(str(qs.query))
         return qs
 
 
