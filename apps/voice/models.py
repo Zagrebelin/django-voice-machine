@@ -20,7 +20,7 @@ class ScheduleItemManager(models.Manager):
     def for_date(self, dt: datetime.datetime = None):
         if not dt:
             dt = datetime.datetime.now()
-            is_holiday = Holiday.objects.filter(date=dt).count() > 0
+        is_holiday = Holiday.objects.filter(date=dt).count() > 0
         dt = dt.replace(second=0)
         qs = super().get_queryset()
         if is_holiday:
