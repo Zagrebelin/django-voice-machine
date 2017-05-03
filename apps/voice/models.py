@@ -41,13 +41,13 @@ def list_to_choices(*items):
 class ScheduleItem(models.Model):
     use_holiday = models.BooleanField()
     use_workday = models.BooleanField()
-    use_monday = models.BooleanField()
-    use_tuesday = models.BooleanField()
-    use_wednesday = models.BooleanField()
-    use_thursday = models.BooleanField()
-    use_friday = models.BooleanField()
-    use_saturday = models.BooleanField()
-    use_sunday = models.BooleanField()
+    use_monday = models.BooleanField(default=True)
+    use_tuesday = models.BooleanField(default=True)
+    use_wednesday = models.BooleanField(default=True)
+    use_thursday = models.BooleanField(default=True)
+    use_friday = models.BooleanField(default=True)
+    use_saturday = models.BooleanField(default=True)
+    use_sunday = models.BooleanField(default=True)
 
     voice_type = models.CharField(max_length=50, choices=list_to_choices('primary', 'secondary', 'random'), default='primary')
     voice_emotion = models.CharField(max_length=50, choices=list_to_choices('neutral', 'evil', 'good'),
@@ -55,7 +55,7 @@ class ScheduleItem(models.Model):
 
     time = models.TimeField()
     message = models.TextField(help_text='Возможные замены: {{time}}, {{date}}, {{weekday}}.')
-    order = models.IntegerField()
+    order = models.IntegerField(default=0)
 
     objects = ScheduleItemManager()
 
