@@ -49,7 +49,7 @@ class ScheduleItem(models.Model):
     use_saturday = models.BooleanField()
     use_sunday = models.BooleanField()
 
-    voice_type = models.CharField(max_length=50, choices=list_to_choices('primary', 'secondary'), default='primary')
+    voice_type = models.CharField(max_length=50, choices=list_to_choices('primary', 'secondary', 'random'), default='primary')
     voice_emotion = models.CharField(max_length=50, choices=list_to_choices('neutral', 'evil', 'good'),
                                      default='neutral')
 

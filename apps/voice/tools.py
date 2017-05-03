@@ -1,3 +1,4 @@
+import random
 import typing
 
 from django.conf import settings
@@ -20,6 +21,9 @@ def download(items: typing.List[models.ScheduleItem]):
         text = item.rendered_message
         parts = text.split('.')
         for part in parts:
-            voice = settings.YANDEX_SPEECH_VOICES.get(item.voice_type, primary_voice)
+            if item.voice_type == 'random':
+                voice = random.choice(list(settings.YANDEX_SPEECH_VOICES.values()))
+            else:
+                voice = settings.YANDEX_SPEECH_VOICES.get(item.voice_type, primary_voice)
             filenames.append(yandex_voice.generate_mp3(part, voice, item.voice_emotion))
     return filenames
