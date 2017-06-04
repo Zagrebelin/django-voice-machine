@@ -81,3 +81,17 @@ def decline(num, zero, one, two):
     if num % 10 == 1:
         return one
     return two
+
+
+def weather_as_text(ws):
+    if not ws:
+        return 'неизвестно что'
+
+    t_min = int(min(w.temperature for w in ws))
+    t_max = int(max(w.temperature for w in ws))
+    if t_min == t_max:
+        temp = f'{t_min} {decline(t_max, "градусов", "градус", "градуса")}'
+    else:
+        temp = f'от {t_min} до {t_max} {decline(t_max, "градусов", "градус", "градуса")}'
+    desc = ' или '.join(set(w.description for w in ws))
+    return f'{desc}. Температура {temp}'

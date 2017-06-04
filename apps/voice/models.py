@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.template import Context, Template
+from django.utils import timezone
 
 import humanize
 
@@ -66,7 +67,12 @@ class ScheduleItem(models.Model):
         context = {
             'date': humanize.date_as_string(dt),
             'time': humanize.time_as_string(dt),
-            'weekday': humanize.weekday_as_string(dt)
+            'weekday': humanize.weekday_as_string(dt),
+            'weather_forecast': 'Утром будет {morning}. Днём ожидается {day}. Вечером {evening}'.format(
+                morning=humanize.weather_as_text(Weather.objects.for_morning(dt)),
+                day=humanize.weather_as_text(Weather.objects.for_day(dt)),
+                evening=humanize.weather_as_text(Weather.objects.for_evening(dt)),
+            )
         }
         ret = t.render(Context(context))
         return ret
@@ -109,3 +115,33 @@ class ScheduleItem(models.Model):
             return 'Каждый день'
 
         return f'{a1}, {a2}'
+
+
+class WeatherManager(models.Manager):
+    def for_morning(self, dt:datetime.datetime):
+        return self.for_hour_range(dt, 5, 10)
+
+    def for_day(self, dt: datetime.datetime):
+        return self.for_hour_range(dt, 11, 16)
+
+    def for_evening(self, dt:datetime.datetime):
+        return self.for_hour_range(dt, 16, 20)
+
+    def for_hour_range(self, dt:datetime.datetime, from_hour:int, to_hour:int):
+        d1 = timezone.make_aware(dt.replace(hour=from_hour, minute=0, second=0, microsecond=0))
+        d2 = timezone.make_aware(dt.replace(hour=to_hour, minute=0, second=0, microsecond=0))
+        qs = super().get_queryset()
+        qs = qs.filter(when__range=(d1, d2))
+        return qs
+
+
+class Weather(models.Model):
+    when = models.DateTimeField(unique=True)
+    wind = models.CharField(max_length=200)
+    temperature = models.IntegerField()
+    description = models.CharField(max_length=200)
+
+    objects = WeatherManager()
+
+    def __str__(self):
+        return str(self.when)
