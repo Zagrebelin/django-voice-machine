@@ -50,7 +50,8 @@ class ScheduleItem(models.Model):
     use_saturday = models.BooleanField(default=True)
     use_sunday = models.BooleanField(default=True)
 
-    voice_type = models.CharField(max_length=50, choices=list_to_choices('primary', 'secondary', 'random'), default='primary')
+    voice_type = models.CharField(max_length=50, choices=list_to_choices('primary', 'secondary', 'random'),
+                                  default='primary')
     voice_emotion = models.CharField(max_length=50, choices=list_to_choices('neutral', 'evil', 'good'),
                                      default='neutral')
 
@@ -62,17 +63,19 @@ class ScheduleItem(models.Model):
 
     @property
     def rendered_message(self):
-        dt = datetime.datetime.now()
+        today = datetime.datetime.now()
+        tomorrow = today + datetime.timedelta(days=1)
         t = Template(self.message)
         context = {
-            'date': humanize.date_as_string(dt),
-            'time': humanize.time_as_string(dt),
-            'weekday': humanize.weekday_as_string(dt),
-            'weather_forecast': 'Утром будет {morning}. Днём ожидается {day}. Вечером {evening}'.format(
-                morning=humanize.weather_as_text(Weather.objects.for_morning(dt)),
-                day=humanize.weather_as_text(Weather.objects.for_day(dt)),
-                evening=humanize.weather_as_text(Weather.objects.for_evening(dt)),
-            )
+            'date': humanize.date_as_string(today),
+            'time': humanize.time_as_string(today),
+            'weekday': humanize.weekday_as_string(today),
+            'weather_today': humanize.weather_for_day(Weather.objects.for_morning(today),
+                                                      Weather.objects.for_day(today),
+                                                      Weather.objects.for_evening(today)),
+            'weather_tommorow': humanize.weather_for_day(Weather.objects.for_morning(tomorrow),
+                                                         Weather.objects.for_day(tomorrow),
+                                                         Weather.objects.for_evening(tomorrow))
         }
         ret = t.render(Context(context))
         return ret
@@ -118,16 +121,16 @@ class ScheduleItem(models.Model):
 
 
 class WeatherManager(models.Manager):
-    def for_morning(self, dt:datetime.datetime):
+    def for_morning(self, dt: datetime.datetime):
         return self.for_hour_range(dt, 5, 10)
 
     def for_day(self, dt: datetime.datetime):
         return self.for_hour_range(dt, 11, 16)
 
-    def for_evening(self, dt:datetime.datetime):
+    def for_evening(self, dt: datetime.datetime):
         return self.for_hour_range(dt, 16, 20)
 
-    def for_hour_range(self, dt:datetime.datetime, from_hour:int, to_hour:int):
+    def for_hour_range(self, dt: datetime.datetime, from_hour: int, to_hour: int):
         d1 = timezone.make_aware(dt.replace(hour=from_hour, minute=0, second=0, microsecond=0))
         d2 = timezone.make_aware(dt.replace(hour=to_hour, minute=0, second=0, microsecond=0))
         qs = super().get_queryset()

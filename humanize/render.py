@@ -95,3 +95,11 @@ def weather_as_text(ws):
         temp = f'от {t_min} до {t_max} {decline(t_max, "градусов", "градус", "градуса")}'
     desc = ' или '.join(set(w.description for w in ws))
     return f'{desc}. Температура {temp}'
+
+
+def weather_for_day(ws_morning, ws_day, ws_evening):
+    return 'Утром будет {morning}. Днём ожидается {day}. Вечером {evening}'.format(
+        morning=weather_as_text(ws_morning),
+        day=weather_as_text(ws_day),
+        evening=weather_as_text(ws_evening),
+    )

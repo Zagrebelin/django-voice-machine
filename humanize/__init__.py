@@ -1,1 +1,1 @@
-from .render import date_as_string, time_as_string, weekday_as_string, weather_as_text
+from .render import date_as_string, time_as_string, weekday_as_string, weather_as_text, weather_for_day
