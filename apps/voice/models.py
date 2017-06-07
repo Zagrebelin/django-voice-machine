@@ -73,7 +73,7 @@ class ScheduleItem(models.Model):
             'weather_today': humanize.weather_for_day(Weather.objects.for_morning(today),
                                                       Weather.objects.for_day(today),
                                                       Weather.objects.for_evening(today)),
-            'weather_tommorow': humanize.weather_for_day(Weather.objects.for_morning(tomorrow),
+            'weather_tomorrow': humanize.weather_for_day(Weather.objects.for_morning(tomorrow),
                                                          Weather.objects.for_day(tomorrow),
                                                          Weather.objects.for_evening(tomorrow))
         }
