@@ -89,8 +89,9 @@ def weather_as_text(ws):
 
     t_min = int(min(w.temperature for w in ws))
     t_max = int(max(w.temperature for w in ws))
-    if t_min == t_max:
-        temp = f'{t_min} {decline(t_max, "градусов", "градус", "градуса")}'
+    if abs(t_min - t_max)<=2:
+        t = int((t_min + t_max) / 2)
+        temp = f'{t} {decline(t, "градусов", "градус", "градуса")}'
     else:
         temp = f'от {t_min} до {t_max} {decline(t_max, "градусов", "градус", "градуса")}'
     desc = ' или '.join(set(w.description for w in ws))
