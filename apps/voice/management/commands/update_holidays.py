@@ -33,7 +33,7 @@ class Command(BaseCommand):
             month_names = 'Январь Февраль Март Апрель Май Июнь Июль Август Сентябрь Октябрь Ноябрь Декабрь'.split()
             for month_num, month_name in enumerate(month_names):
                 days = line[month_name]
-                days = list(map(int, re.findall('\d+', days)))
+                days = list(map(int, re.findall('\d+(?!\*)', days)))
                 dates = (datetime.datetime(year=year, month=month_num + 1, day=day) for day in days)
                 hds = [models.Holiday(year=year, date=date) for date in dates]
                 models.Holiday.objects.bulk_create(hds)
