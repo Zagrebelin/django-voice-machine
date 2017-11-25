@@ -76,6 +76,7 @@ def int_to_str(i: int, gender: str = 'male') -> str:
 
 
 def decline(num, zero, one, two):
+    num = abs(num)
     if (num % 100) // 10 == 1 or num % 10 in (0, 5, 6, 7, 8, 9):
         return zero
     if num % 10 == 1:
