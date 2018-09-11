@@ -12,27 +12,51 @@ from lxml.html import fromstring
 
 from ... import models
 
+month_names = [
+    'января', 'февраля', "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "декабря"
+]
+
+hours_in_day = [
+    (6, 7),
+    (12, 13),
+    (17, 18)
+]
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        data = self.fetch()
-        for item in data['list']:
-            when = datetime.datetime.utcfromtimestamp(item['dt'])
-            when2 = timezone.make_aware(when, timezone=timezone.utc)
-            temp = int(item['main']['temp'])
-            desc = ' или '.join(w['description'] for w in item['weather'])
-            wind = ''
-            models.Weather.objects.get_or_create(when=when2,
-                                                 defaults={'temperature': temp, 'description': desc, 'wind': wind})
+        url = 'https://yandex.ru/pogoda/perm/details?lat=58.023361&lon=56.016228'
+        rsp = requests.get(url)
+        doc = fromstring(rsp.text)
 
-    def parse_row(self, tr):
-        pass
-
-    def fetch_x(self):
-        return json.load(open('we.json'))
-
-    def fetch(self):
-        url = 'http://api.openweathermap.org/data/2.5/forecast?q=Perm,ru&appid=1df91491ea999dfa1ba79dbb41c8a0ad&lang=ru&units=metric'
-        html = requests.get(url)
-        data = html.json()
-        return data
+        dd_days = doc.xpath("//dt[contains(@class, 'forecast-details__day')]")
+        today = timezone.now()
+        for dd_day in dd_days:
+            day = int(dd_day.xpath(".//*[@class='forecast-details__day-number']/text()")[0])
+            month = dd_day.xpath(".//*[@class='forecast-details__day-month']/text()")[0]
+            month = month_names.index(month)+1
+            if month == today.month:
+                year = today.year
+            elif month == 1 and today.month == 12:
+                year = today.year + 1
+            dd_weather = dd_day.xpath("./following-sibling::dd[1]")[0]
+            print("\n", day, month, year)
+            trs = dd_weather.xpath(".//tr[@class='weather-table__row']")
+            for hours, tr in zip(hours_in_day, trs):
+                temps = map(int, tr.xpath(".//div[contains(@class, 'weather-table__temp')]//span[@class='temp__value']/text()"))
+                desc = tr.xpath(".//td[contains(@class, 'weather-table__body-cell_type_condition')]/text()")[0]
+                wind = {
+                    'speed': tr.xpath(".//span[@class='wind-speed']/text()"),
+                    'direction': tr.xpath(".//div[@class='weather-table__wind-direction']/abbr/@title")
+                }
+                if wind['speed']:
+                    wind['speed'] = int(wind['speed'][0].split(',')[0])
+                    wind['direction'] = wind['direction'][0].split(':')[1]
+                else:
+                    wind['speed'] = 0
+                    wind['direction'] = ''
+                for hour, temp in zip(hours, temps):
+                    when = datetime.datetime(year, month, day, hour, 0, 0)
+                    when = timezone.make_aware(when, timezone=timezone.get_default_timezone())
+                    models.Weather.objects.get_or_create(when=when,
+                                                         defaults={'temperature': temp, 'description': desc,
+                                                                   'wind': wind})
