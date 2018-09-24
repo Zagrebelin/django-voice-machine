@@ -57,6 +57,6 @@ class Command(BaseCommand):
                 for hour, temp in zip(hours, temps):
                     when = datetime.datetime(year, month, day, hour, 0, 0)
                     when = timezone.make_aware(when, timezone=timezone.get_default_timezone())
-                    models.Weather.objects.get_or_create(when=when,
-                                                         defaults={'temperature': temp, 'description': desc,
-                                                                   'wind': wind})
+                    models.Weather.objects.update_or_create(when=when,
+                                                            defaults={'temperature': temp, 'description': desc,
+                                                                      'wind': wind})
