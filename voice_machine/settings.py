@@ -26,7 +26,7 @@ SECRET_KEY = 'w@k(x12_^-eegilrbfuk0$w1ca9ai@eylah@$ecirkbvzd@=lt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -120,7 +120,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'assets', 'static')
+]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'assets', 'media')
 
 # yandex speech
 YANDEX_SPEECH_API_KEY = 'a25004df-0aaf-4db3-9c34-31fa35a2ba51'
@@ -134,3 +139,14 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+MP3_PLAYER = print
+OGG_PLAYER = print
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'zagrebelin@yandex.ru'
+EMAIL_HOST_PASSWORD = 'ctlxsllmgkvinufj'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+# django.core.mail.backends.smtp.EmailBackend

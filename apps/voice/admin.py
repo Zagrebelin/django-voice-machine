@@ -15,5 +15,6 @@ class ScheduleItemAdmin(ModelAdmin):
 admin.site.register(models.Holiday, list_filter=['year'])
 admin.site.register(models.ScheduleItem, ScheduleItemAdmin)
 admin.site.register(models.Weather)
+admin.site.register(models.RenderedScheduleItem)
 
 # Register your models here.

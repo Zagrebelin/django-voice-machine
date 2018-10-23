@@ -1,0 +1,121 @@
+{% load static %}
+<html>
+<head>
+    <style>
+        .container {
+            width: 100%;
+        }
+        #time {
+            font-size: 9em;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+        #time #hour-minute {
+            font-size: 100%;
+        }
+        #time #seconds {
+            font-size: 75%;
+        }
+        #date {
+            font-size: 3em;
+            text-align: center;
+        }
+        #date #weekday { padding-left: 1ex}
+        #weather {
+            font-size: 3em;
+            text-align: center;
+        }
+    </style>
+    <script src="{% static 'screenfull.js'%}" type="text/javascript" ></script>
+
+</head>
+<body>
+<div class="container">
+    <div id="time">
+        <span id="hour-minute"></span><span id="seconds"></span>
+    </div>
+    <div id="date">
+        <span id="day-month"></span><span id="weekday"></span>
+    </div>
+    <div id="weather"></div>
+</div>
+
+<script type="text/javascript">
+    Number.prototype.pad = function(size) {
+        var s = String(this);
+        while (s.length < (size || 2)) {s = "0" + s;}
+        return s;
+    };
+
+    function showTime(){
+        var time = new Date();
+        var monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября',
+            'октября', 'ноября', 'декабря'];
+        var weekNames = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+        document.getElementById("hour-minute").innerText = time.getHours()+":"+time.getMinutes().pad(2);
+        document.getElementById("seconds").innerText = ":"+time.getSeconds().pad(2);
+        if (time.getSeconds() < 10) {
+            document.getElementById('weather').style.display = 'none';
+            document.getElementById('date').style.display = 'block';
+            document.getElementById("day-month").innerText = time.getDate() + " " + monthNames[time.getMonth()];
+            document.getElementById("weekday").innerText = weekNames[time.getDay()];
+        } else {
+            document.getElementById('weather').style.display = 'block';
+            document.getElementById('date').style.display = 'none';
+            document.getElementById('weather').innerText = 'тут будет про погоду';
+        }
+    }
+
+    function playMp3s(urls){
+        function playNext(){
+            console.log(urls, audio, index);
+            index += 1;
+            if (index<urls.length) {
+                audio.src = urls[index];
+                audio.play();
+            }
+        }
+
+        var audio = new Audio();
+        var index = 0;
+        audio.src = urls[index];
+        audio.onended = playNext;
+        audio.play();
+    }
+
+    function downloadNewAudio(){
+        var now = new Date();
+        now.setSeconds(0);
+        now.setMilliseconds(0);
+
+        fetch('/clock/get_mp3_files.json', {
+            method: 'POST',
+            body: JSON.stringify({dt:now}),
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded'
+            }
+            })
+        .then(response => response.json())
+        .then(data => playMp3s(data));
+    }
+
+    document.getElementById('time').addEventListener('click', function(){
+        if (screenfull.enabled) {
+		    screenfull.toggle();
+	    }
+    });
+
+
+
+    setInterval(showTime, 1000);
+    var waitForStartOfMinute = setInterval(function(){
+        if(new Date().getSeconds() === 0){
+            clearInterval(waitForStartOfMinute);
+            setInterval(downloadNewAudio, 60*1000);
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
