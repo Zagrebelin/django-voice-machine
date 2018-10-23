@@ -69,19 +69,17 @@
 
     function playMp3s(urls){
         function playNext(){
-            console.log(urls, audio, index);
-            index += 1;
             if (index<urls.length) {
                 audio.src = urls[index];
                 audio.play();
             }
+            index += 1;
         }
 
-        var audio = new Audio();
         var index = 0;
-        audio.src = urls[index];
+        var audio = new Audio();
         audio.onended = playNext;
-        audio.play();
+        playNext();
     }
 
     function downloadNewAudio(){
@@ -100,13 +98,15 @@
         .then(data => playMp3s(data));
     }
 
+
+    // ***********************
+    // MAIN
+
     document.getElementById('time').addEventListener('click', function(){
         if (screenfull.enabled) {
 		    screenfull.toggle();
 	    }
     });
-
-
 
     setInterval(showTime, 1000);
     var waitForStartOfMinute = setInterval(function(){

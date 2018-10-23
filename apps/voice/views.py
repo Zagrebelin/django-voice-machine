@@ -27,7 +27,8 @@ class Mp3Filenames(ListView):
         timestr = self.kwargs.get('dt')
         time = datetime.strptime(timestr, '%Y-%m-%dT%H:%M:%S.%fZ')
         time2 = make_aware(time)
-        return qs.filter(when=time2).order_by('order')
+        qs = qs.filter(when=time2).order_by('order')
+        return qs
 
     def render_to_response(self, context, **response_kwargs):
         os = context['object_list']
