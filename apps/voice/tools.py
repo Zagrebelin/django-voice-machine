@@ -1,11 +1,12 @@
 import random
 import typing
 from hashlib import md5
+from typing import Generator
 
+import requests
 from django.conf import settings
-from django.core.files.storage import get_storage_class, DefaultStorage, default_storage
+from django.core.files.storage import default_storage
 
-import yandex_voice
 from . import models
 
 
@@ -32,9 +33,24 @@ def download(items: typing.List[models.ScheduleItem]):
 
             if not storage.exists(filename):
                 file = storage.open(filename, mode='wb')
-                for chunk in yandex_voice.get_mp3_content(part, voice, item.voice_emotion):
+                for chunk in get_mp3_content(part, voice, item.voice_emotion):
                     file.write(chunk)
                 file.close()
             filenames.append(filename)
 
     return filenames
+
+
+def get_mp3_content(msg: str, voice: str, emotion: str = 'neutral') -> Generator[bytes, None, None]:
+    url = 'https://tts.voicetech.yandex.net/generate'
+    data = {
+        'text': msg,
+        'format': 'mp3',
+        'lang': 'ru-RU',
+        'speaker': voice,
+        'key': settings.YANDEX_SPEECH_API_KEY,
+        'emotion': emotion
+    }
+    rsp = requests.get(url, params=data, stream=True)
+    for data in rsp.iter_content(chunk_size=4096):
+        yield data
