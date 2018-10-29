@@ -55,7 +55,7 @@ class ScheduleItem(models.Model):
                                      default='neutral')
 
     time = models.TimeField()
-    message = models.TextField(help_text='Возможные замены: {{time}}, {{date}}, {{weekday}}.')
+    message = models.TextField(help_text='Возможные замены: {{time}}, {{date}}, {{weekday}}, {{weather_today}}, {{weather_tomorrow}}.')
     order = models.IntegerField(default=0)
 
     objects = ScheduleItemManager()
