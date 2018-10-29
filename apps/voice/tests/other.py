@@ -2,7 +2,7 @@ import datetime
 
 from django.test import TestCase
 
-from . import models
+from .. import models
 
 
 class SchItemDisplayTestCase(TestCase):
@@ -137,7 +137,6 @@ class SchItemRenderTestCase(TestCase):
     def test_time(self):
         item = models.ScheduleItem(message="{{time}}")
         actual = item.rendered_message
-        print(actual)
         self.assertIsInstance(actual, str)
         self.assertGreater(len(actual), 0)
         self.assertNotIn('{', actual)
@@ -146,7 +145,6 @@ class SchItemRenderTestCase(TestCase):
     def test_date(self):
         item = models.ScheduleItem(message="{{date}}")
         actual = item.rendered_message
-        print(actual)
         self.assertIsInstance(actual, str)
         self.assertGreater(len(actual), 0)
         self.assertNotIn('{', actual)
@@ -155,7 +153,6 @@ class SchItemRenderTestCase(TestCase):
     def test_weekday(self):
         item = models.ScheduleItem(message="{{weekday}}")
         actual = item.rendered_message
-        print(actual)
         self.assertIsInstance(actual, str)
         self.assertGreater(len(actual), 0)
         self.assertNotIn('{', actual)

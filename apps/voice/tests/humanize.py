@@ -1,7 +1,8 @@
 import datetime
 import functools
 from unittest import TestCase, main
-from .render import time_as_string, int_to_str, decline, weekday_as_string, date_as_string
+
+from ..humanize import time_as_string, int_to_str, decline, weekday_as_string, date_as_string
 
 
 class TimeTestCase(TestCase):

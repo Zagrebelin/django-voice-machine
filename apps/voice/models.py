@@ -4,7 +4,7 @@ from django.db import models
 from django.template import Context, Template
 from django.utils import timezone
 
-import humanize
+from . import humanize
 
 
 class Holiday(models.Model):
