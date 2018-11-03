@@ -1,0 +1,3 @@
+recursive-include voice_machine/templates *
+recursive-include voice_machine/static *
+include voice_machine/humanize_testdata.txt
