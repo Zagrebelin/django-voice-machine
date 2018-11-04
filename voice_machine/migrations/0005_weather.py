@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('voice', '0004_auto_20170503_1940'),
+        ('voice_machine', '0004_auto_20170503_1940'),
     ]
 
     operations = [

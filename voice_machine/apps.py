@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VoiceConfig(AppConfig):
-    name = 'voice'
+    name = 'voice_machine'
