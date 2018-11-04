@@ -28,7 +28,6 @@
         }
     </style>
     <script src="{% static 'js/screenfull.js'%}" type="text/javascript" ></script>
-    <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
 
 </head>
 <body>
@@ -88,7 +87,7 @@
         now.setSeconds(0);
         now.setMilliseconds(0);
 
-        fetch(Urls['voice:mp3-files'](), {
+        fetch('get_mp3_files.json', {
             method: 'POST',
             body: JSON.stringify({dt:now}),
             headers: {
