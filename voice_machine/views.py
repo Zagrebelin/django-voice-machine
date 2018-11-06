@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, utc
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from django.contrib.staticfiles.templatetags.staticfiles import static
@@ -27,7 +27,7 @@ class Mp3Filenames(ListView):
         qs = super().get_queryset()
         timestr = self.kwargs.get('dt')
         time = datetime.strptime(timestr, '%Y-%m-%dT%H:%M:%S.%fZ')
-        time2 = make_aware(time)
+        time2 = make_aware(time, timezone=utc)
         qs = qs.filter(when=time2).order_by('order')
         return qs
 
