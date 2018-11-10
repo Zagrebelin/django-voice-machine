@@ -22,7 +22,7 @@ def mp3_filenames(request):
     dt_utc = make_aware(dt, timezone=utc)
     dt_local = dt_utc.astimezone(get_default_timezone())
     items = models.ScheduleItem.objects.for_date(dt_local)
-    _, urls = tools.download(items)
+    _, urls = tools.download(items, dt_local)
     if urls:
         urls.insert(0, static('dindon.mp3'))
 

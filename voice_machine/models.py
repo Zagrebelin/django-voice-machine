@@ -61,18 +61,16 @@ class ScheduleItem(models.Model):
 
     objects = ScheduleItemManager()
 
-    @property
-    def rendered_message(self):
-        today = datetime.datetime.now()
-        tomorrow = today + datetime.timedelta(days=1)
+    def render(self, dt):
+        tomorrow = dt + datetime.timedelta(days=1)
         t = Template(self.message)
         context = {
-            'date': humanize.date_as_string(today),
-            'time': humanize.time_as_string(today),
-            'weekday': humanize.weekday_as_string(today),
-            'weather_today': humanize.weather_for_day(Weather.objects.for_morning(today),
-                                                      Weather.objects.for_day(today),
-                                                      Weather.objects.for_evening(today)),
+            'date': humanize.date_as_string(dt),
+            'time': humanize.time_as_string(dt),
+            'weekday': humanize.weekday_as_string(dt),
+            'weather_today': humanize.weather_for_day(Weather.objects.for_morning(dt),
+                                                      Weather.objects.for_day(dt),
+                                                      Weather.objects.for_evening(dt)),
             'weather_tomorrow': humanize.weather_for_day(Weather.objects.for_morning(tomorrow),
                                                          Weather.objects.for_day(tomorrow),
                                                          Weather.objects.for_evening(tomorrow))

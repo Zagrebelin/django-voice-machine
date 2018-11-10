@@ -16,7 +16,7 @@ def talk(items: typing.List[models.ScheduleItem]):
         settings.MP3_PLAYER(filenames)
 
 
-def download(items: typing.List[models.ScheduleItem]):
+def download(items: typing.List[models.ScheduleItem], dt):
     voices = getattr(settings, 'YANDEX_SPEECH_VOICES', {'primary': 'oksana'})
     primary_voice = voices['primary']
     storage = default_storage
@@ -24,7 +24,7 @@ def download(items: typing.List[models.ScheduleItem]):
     filenames = []
     urls = []
     for item in items:
-        text = item.rendered_message
+        text = item.render(dt)
         parts = text.split('.')
         for part in parts:
             if item.voice_type == 'random':
