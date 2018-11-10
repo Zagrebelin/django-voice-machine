@@ -17,18 +17,20 @@ def talk(items: typing.List[models.ScheduleItem]):
 
 
 def download(items: typing.List[models.ScheduleItem]):
-    primary_voice = settings.YANDEX_SPEECH_VOICES['primary']
+    voices = getattr(settings, 'YANDEX_SPEECH_VOICES', {'primary': 'oksana'})
+    primary_voice = voices['primary']
     storage = default_storage
 
     filenames = []
+    urls = []
     for item in items:
         text = item.rendered_message
         parts = text.split('.')
         for part in parts:
             if item.voice_type == 'random':
-                voice = random.choice(list(settings.YANDEX_SPEECH_VOICES.values()))
+                voice = random.choice(list(voices.values()))
             else:
-                voice = settings.YANDEX_SPEECH_VOICES.get(item.voice_type, primary_voice)
+                voice = voices.get(item.voice_type, primary_voice)
             filename = md5(f'{voice} {item.voice_emotion} {part}'.encode()).hexdigest() + '.mp3'
 
             if not storage.exists(filename):
@@ -37,8 +39,9 @@ def download(items: typing.List[models.ScheduleItem]):
                     file.write(chunk)
                 file.close()
             filenames.append(filename)
+            urls.append(storage.url(filename))
 
-    return filenames
+    return filenames, urls
 
 
 def get_mp3_content(msg: str, voice: str, emotion: str = 'neutral') -> Generator[bytes, None, None]:

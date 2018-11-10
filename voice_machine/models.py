@@ -31,6 +31,7 @@ class ScheduleItemManager(models.Manager):
         weekday_field = 'use_' + self.weekdaynames[dt.weekday()]
         qs = qs.filter(**{weekday_field: True})
         qs = qs.filter(time=dt.time())
+        qs = qs.order_by('order')
         return qs
 
 
@@ -147,11 +148,3 @@ class Weather(models.Model):
 
     def __str__(self):
         return str(self.when)
-
-
-class RenderedScheduleItem(models.Model):
-    when = models.DateTimeField()
-    file = models.FileField()
-    order = models.IntegerField()
-    class Meta:
-        ordering = ['order']
