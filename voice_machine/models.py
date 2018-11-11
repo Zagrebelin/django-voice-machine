@@ -129,8 +129,12 @@ class WeatherManager(models.Manager):
         return self.for_hour_range(dt, 16, 20)
 
     def for_hour_range(self, dt: datetime.datetime, from_hour: int, to_hour: int):
-        d1 = timezone.make_aware(dt.replace(hour=from_hour, minute=0, second=0, microsecond=0))
-        d2 = timezone.make_aware(dt.replace(hour=to_hour, minute=0, second=0, microsecond=0))
+        d1 = dt.replace(hour=from_hour, minute=0, second=0, microsecond=0)
+        d2 = dt.replace(hour=to_hour, minute=0, second=0, microsecond=0)
+        if timezone.is_naive(d1):
+            d1 = timezone.make_aware(d1)
+        if timezone.is_naive(d2):
+            d2 = timezone.make_aware()
         qs = super().get_queryset()
         qs = qs.filter(when__range=(d1, d2))
         return qs
