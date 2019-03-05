@@ -22,6 +22,11 @@ hours_in_day = [
     (17, 18)
 ]
 
+
+def parse_temp(s):
+    return int(s.replace('−','-'))
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         url = 'https://yandex.ru/pogoda/perm/details?lat=58.023361&lon=56.016228'
@@ -42,7 +47,7 @@ class Command(BaseCommand):
             print("\n", day, month, year)
             trs = dd_weather.xpath(".//tr[@class='weather-table__row']")
             for hours, tr in zip(hours_in_day, trs):
-                temps = map(int, tr.xpath(".//div[contains(@class, 'weather-table__temp')]//span[@class='temp__value']/text()"))
+                temps = map(parse_temp, tr.xpath(".//div[contains(@class, 'weather-table__temp')]//span[@class='temp__value']/text()"))
                 desc = tr.xpath(".//td[contains(@class, 'weather-table__body-cell_type_condition')]/text()")[0]
                 wind = {
                     'speed': tr.xpath(".//span[@class='wind-speed']/text()"),
